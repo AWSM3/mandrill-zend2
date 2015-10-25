@@ -1,0 +1,30 @@
+{
+    "name": "freax/mandrill-zend2",
+    "type": "library",
+    "description": "A PHP client library for Mandrill's REST API for Zend Framework 2+",
+    "keywords": [
+        "mandrill",
+        "zf2"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Freax",
+            "homepage": "https://github.com/freax"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "zendframework/zend-json": "~2.5",
+        "zendframework/zend-mail": "~2.5",
+        "zendframework/zend-http": "~2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mandrill\\": "src/"
+        }
+    }
+}
