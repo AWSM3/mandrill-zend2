@@ -55,10 +55,12 @@ abstract class AbstractApi
      */
     protected function request($url, array $body = [])
     {
+        $return = null;
+
         $section = explode('\\', get_called_class());
         $section = strtolower(end($section));
 
-        $client = new Client(self::BASE_URL.$section.'/'.$url.'.json');
+        $client = new Client(self::BASE_URL . $section . '/' . $url . '.json');
 
         $body['key'] = $this->apiKey;
 
@@ -66,16 +68,17 @@ abstract class AbstractApi
         $client->setParameterPost($body);
 
         try {
-            $response = $client->send();
-            $response = $response->getBody();
+            $response = $client->send()->getBody();
+
+            $return = Json::decode($response);
         } catch (HttpRuntimeException $e) {
             // empty response
             return;
         } catch (JsonRuntimeException $e) {
-            /// invalid response
+            // invalid response
             throw new MandrillException($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
 
-        return Json::decode($response);
+        return $return;
     }
 }
