@@ -24,7 +24,7 @@ abstract class AbstractStruct implements \IteratorAggregate
      * @param array $data   associative array array('property'=>data)
      * @param bool  $filter (optional) if true, $data array keys which are not defined as properties in the Struct will be ignored
      *
-     * @return Struct
+     * @return AbstractStruct
      */
     public static function fromArray(array $data, $filter = false)
     {
