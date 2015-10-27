@@ -21,7 +21,8 @@ use Zend\Http\Client;
 use Zend\Http\Request;
 use Zend\Http\Exception\RuntimeException as HttpRuntimeException;
 use Zend\Json\Exception\RuntimeException as JsonRuntimeException;
-use Mandrill\Exception as MandrillException;
+use Mandrill\Exception\EmptyResponseException;
+use Mandrill\Exception\InvalidResponseFormatException;
 
 /**
  * Class AbstractApi.
@@ -49,14 +50,12 @@ abstract class AbstractApi
      * @param string $url
      * @param array  $body
      *
-     * @throws Mandrill\Exception
+     * @throws Mandrill\ExceptionInterface
      *
      * @return array
      */
     protected function request($url, array $body = [])
     {
-        $return = null;
-
         $section = explode('\\', get_called_class());
         $section = strtolower(end($section));
 
@@ -67,16 +66,17 @@ abstract class AbstractApi
         $client->setMethod(Request::METHOD_POST);
         $client->setParameterPost($body);
 
+        $return = null;
+
         try {
             $response = $client->send()->getBody();
-
             $return = Json::decode($response);
         } catch (HttpRuntimeException $e) {
             // empty response
-            return;
+            throw new EmptyResponseException('Response is empty, service unavailable.');
         } catch (JsonRuntimeException $e) {
             // invalid response
-            throw new MandrillException($e->getMessage(), $e->getCode(), $e->getPrevious());
+            throw new InvalidResponseFormatException('Response must be in valid json format.');
         }
 
         return $return;
