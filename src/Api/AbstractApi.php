@@ -50,7 +50,8 @@ abstract class AbstractApi
      * @param string $url
      * @param array  $body
      *
-     * @throws Mandrill\ExceptionInterface
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      *
      * @return array
      */
