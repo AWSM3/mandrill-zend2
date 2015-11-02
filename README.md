@@ -1,9 +1,9 @@
-Mandrill API for Zend Framework 2+
+Mandrill API for Zend Framework 2 (>=2.5)
 ================
 
-A PHP ZF2 client library for [Mandrill's API](https://mandrillapp.com/api/docs/).
+A PHP ZF2 (>=2.5) client library for [Mandrill's API](https://mandrillapp.com/api/docs/).
 
-This library provides all of the functionality present in the [official PHP client](https://bitbucket.org/mailchimp/mandrill-api-php/), but makes use of namespaces, provides helper classes to ease message sending and works with Zend Framework 2+ (uses its library).
+This library provides all of the functionality present in the [official PHP client](https://bitbucket.org/mailchimp/mandrill-api-php/), but makes use of namespaces, provides helper classes to ease message sending and works with Zend Framework 2 (>=2.5) (uses its library).
 
 This library based on Joe Linn's library (https://github.com/jlinn/mandrill-api-php).
 

@@ -1,7 +1,7 @@
 {
     "name": "freax/mandrill-zend2",
     "type": "library",
-    "description": "A PHP client library for Mandrill's REST API for Zend Framework 2+",
+    "description": "A PHP client library for Mandrill's REST API for Zend Framework 2 (>=2.5)",
     "keywords": [
         "mandrill",
         "zf2"
