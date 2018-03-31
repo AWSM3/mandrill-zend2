@@ -1,50 +1,34 @@
 <?php
 /**
  * Recipient.php
- * Freax, started: Oct 26, 2015 4:53:07 PM.
- *
  * @author based on https://github.com/jlinn/mandrill-api-php
- *
- * @see https://mandrillapp.com/api/docs/
+ * @see    https://mandrillapp.com/api/docs/
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Struct;
 
 /**
- * Class Recipient.
+ * Class Recipient
+ * @package Mandrill\Struct
  */
 class Recipient extends AbstractStruct
 {
-    const RECIPIENT_TYPE_TO = 'to';
-    const RECIPIENT_TYPE_CC = 'cc';
-    const RECIPIENT_TYPE_BCC = 'bcc';
+    const
+        RECIPIENT_TYPE_TO = 'to',
+        RECIPIENT_TYPE_CC = 'cc',
+        RECIPIENT_TYPE_BCC = 'bcc';
 
-    /**
-     * @var string the recipient's email address
-     */
+    /** @var string the recipient's email address */
     public $email;
-
-    /**
-     * @var string the recipient's name
-     */
+    /** @var string the recipient's name */
     public $name;
-
-    /**
-     * @var string the recipient's header type i.e. 'to', 'cc', 'bcc'
-     */
+    /** @var string the recipient's header type i.e. 'to', 'cc', 'bcc' */
     public $type = 'to';
-
-    /**
-     * @var array associative array of recipient-specific merge variables
-     */
-    protected $merge_vars = [];
-
-    /**
-     * @var array associative array of metadata
-     */
+    /** @var array associative array of recipient-specific merge variables */
+    protected $mergeVars = [];
+    /** @var array associative array of metadata */
     protected $metadata = [];
 
     /**
@@ -68,21 +52,11 @@ class Recipient extends AbstractStruct
     }
 
     /**
-     * Add a merge variable to this recipient.
-     *
-     * @param string $name
-     * @param string $content
-     *
-     * @return $this
+     * @return array
      */
-    public function addMergeVar($name, $content)
+    public function getMergeVars()
     {
-        $this->merge_vars[] = [
-            'name' => $name,
-            'content' => $content,
-        ];
-
-        return $this;
+        return $this->mergeVars;
     }
 
     /**
@@ -94,7 +68,7 @@ class Recipient extends AbstractStruct
      */
     public function setMergeVars(array $vars)
     {
-        $this->merge_vars = [];
+        $this->mergeVars = [];
 
         foreach ($vars as $name => $content) {
             $this->addMergeVar($name, $content);
@@ -104,11 +78,21 @@ class Recipient extends AbstractStruct
     }
 
     /**
-     * @return array
+     * Add a merge variable to this recipient.
+     *
+     * @param string $name
+     * @param string $content
+     *
+     * @return $this
      */
-    public function getMergeVars()
+    public function addMergeVar($name, $content)
     {
-        return $this->merge_vars;
+        $this->mergeVars[] = [
+            'name'    => $name,
+            'content' => $content,
+        ];
+
+        return $this;
     }
 
     /**
@@ -127,6 +111,14 @@ class Recipient extends AbstractStruct
     }
 
     /**
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
      * Set all metadata for this message. Will overwrite any current metadata.
      *
      * @param array $metadata associative array
@@ -138,13 +130,5 @@ class Recipient extends AbstractStruct
         $this->metadata = $metadata;
 
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMetadata()
-    {
-        return $this->metadata;
     }
 }

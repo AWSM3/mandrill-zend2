@@ -1,26 +1,21 @@
 <?php
 /**
  * Message.php
- * Freax, started: Oct 26, 2015 4:53:02 PM.
- *
  * @author based on https://github.com/jlinn/mandrill-api-php
- *
- * @see https://mandrillapp.com/api/docs/
+ * @see    https://mandrillapp.com/api/docs/
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Struct;
 
-/*
- * @uses
- */
+/** @uses */
 use Zend\Mail\Message as ZendMessage;
 use Zend\Mime\Mime as ZendMime;
 
 /**
- * Class Message.
+ * Class Message
+ * @package Mandrill\Struct
  */
 class Message extends AbstractStruct
 {
@@ -150,7 +145,8 @@ class Message extends AbstractStruct
     public $subaccount;
 
     /**
-     * @var string[] URLs matching domains listed here will automatically have Google Analytics parameters appended to their query strings
+     * @var string[] URLs matching domains listed here will automatically have Google Analytics parameters appended to
+     *      their query strings
      */
     public $google_analytics_domains = [];
 
@@ -180,18 +176,105 @@ class Message extends AbstractStruct
     public $images = [];
 
     /**
-     * Set a global merge variable. Will overwrite any current variable with the given key.
+     * Create `Mandrill message` from `ZF message`.
      *
-     * @param string $name
-     * @param string $content
+     * @param ZendMessage $zfMessage
+     *
+     * @return Message
+     */
+    public static function convertZFMail(ZendMessage $zfMessage)
+    {
+        $mandrillMessage = new self();
+
+        // GET HTML MIME PART
+        $messageHtmlPart = $messageTextPart = null;
+        $mimeParts = $zfMessage->getBody()->getParts();
+
+        foreach ($mimeParts as $mimePart) {
+            switch ($mimePart->getType()) {
+                case ZendMime::TYPE_HTML:
+                    $messageHtmlPart = $mimePart->getContent();
+                    break;
+
+                case ZendMime::TYPE_TEXT:
+                    $messageTextPart = $mimePart->getContent();
+                    break;
+            }
+        }
+
+        // text part
+        if ($messageTextPart !== null) {
+            $mandrillMessage->text = $messageTextPart;
+        }
+
+        // html part
+        if ($messageHtmlPart !== null) {
+            $mandrillMessage->html = $messageHtmlPart;
+        }
+
+        // subject
+        if ($zfMessage->getSubject() !== null) {
+            $mandrillMessage->subject = $zfMessage->getSubject();
+        }
+
+        // from
+        if ($zfMessage->getFrom()->count()) {
+            $mandrillMessage->from_email = $zfMessage->getFrom()->current()->getEmail();
+            $mandrillMessage->from_name = $zfMessage->getFrom()->current()->getName();
+        }
+
+        // reply-to
+        if ($zfMessage->getReplyTo()->count()) {
+            $mandrillMessage->headers = ['Reply-To' => $zfMessage->getReplyTo()->current()->getEmail()];
+        }
+
+        // to
+        if ($zfMessage->getTo()->count()) {
+            foreach ($zfMessage->getTo() as $to) {
+                $mandrillMessage->addRecipient(new Recipient($to->getEmail(), null, Recipient::RECIPIENT_TYPE_TO));
+            }
+        }
+
+        // cc
+        if ($zfMessage->getCc()->count()) {
+            foreach ($zfMessage->getCc() as $cc) {
+                $mandrillMessage->addRecipient(new Recipient($cc->getEmail(), null, Recipient::RECIPIENT_TYPE_CC));
+            }
+        }
+
+        // bcc
+        if ($zfMessage->getBcc()->count()) {
+            foreach ($zfMessage->getBcc() as $bcc) {
+                $mandrillMessage->addRecipient(new Recipient($bcc->getEmail(), null, Recipient::RECIPIENT_TYPE_BCC));
+            }
+        }
+
+        return $mandrillMessage;
+    }
+
+    /**
+     * Add a recipient to this message.
+     *
+     * @param Recipient $recipient
      *
      * @return $this
      */
-    public function addGlobalMergeVar($name, $content)
+    public function addRecipient(Recipient $recipient)
     {
-        $this->global_merge_vars[] = [
-            'name' => $name,
-            'content' => $content,
+        $this->to[] = [
+            'email' => $recipient->email,
+            'name'  => $recipient->name,
+            'type'  => $recipient->type,
+        ];
+
+        $this->merge_vars[] = [
+            'rcpt' => $recipient->email,
+            'vars' => $recipient->getMergeVars(),
+        ];
+
+        $this->recipient_metadata[] = [
+            'rcpt'   => $recipient->email,
+            'values' => $recipient->getMetadata(),
         ];
 
         return $this;
@@ -211,6 +294,24 @@ class Message extends AbstractStruct
         foreach ($vars as $name => $content) {
             $this->addGlobalMergeVar($name, $content);
         }
+
+        return $this;
+    }
+
+    /**
+     * Set a global merge variable. Will overwrite any current variable with the given key.
+     *
+     * @param string $name
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function addGlobalMergeVar($name, $content)
+    {
+        $this->global_merge_vars[] = [
+            'name'    => $name,
+            'content' => $content,
+        ];
 
         return $this;
     }
@@ -301,34 +402,6 @@ class Message extends AbstractStruct
     }
 
     /**
-     * Add a recipient to this message.
-     *
-     * @param Recipient $recipient
-     *
-     * @return $this
-     */
-    public function addRecipient(Recipient $recipient)
-    {
-        $this->to[] = [
-            'email' => $recipient->email,
-            'name' => $recipient->name,
-            'type' => $recipient->type,
-        ];
-
-        $this->merge_vars[] = [
-            'rcpt' => $recipient->email,
-            'vars' => $recipient->getMergeVars(),
-        ];
-
-        $this->recipient_metadata[] = [
-            'rcpt' => $recipient->email,
-            'values' => $recipient->getMetadata(),
-        ];
-
-        return $this;
-    }
-
-    /**
      * Add an attachment to this message.
      *
      * @param Attachment $attachment
@@ -354,82 +427,5 @@ class Message extends AbstractStruct
         $this->images[] = $image->toArray();
 
         return $this;
-    }
-
-    /**
-     * Create `Mandrill message` from `ZF message`.
-     *
-     * @param ZendMessage $zfMessage
-     *
-     * @return Message
-     */
-    public static function convertZFMail(ZendMessage $zfMessage)
-    {
-        $mandrillMessage = new self();
-
-        // GET HTML MIME PART
-        $messageHtmlPart = $messageTextPart = null;
-        $mimeParts = $zfMessage->getBody()->getParts();
-
-        foreach ($mimeParts as $mimePart) {
-            switch ($mimePart->getType()) {
-                case ZendMime::TYPE_HTML:
-                    $messageHtmlPart = $mimePart->getContent();
-                    break;
-
-                case ZendMime::TYPE_TEXT:
-                    $messageTextPart = $mimePart->getContent();
-                    break;
-            }
-        }
-
-        // text part
-        if ($messageTextPart !== null) {
-            $mandrillMessage->text = $messageTextPart;
-        }
-
-        // html part
-        if ($messageHtmlPart !== null) {
-            $mandrillMessage->html = $messageHtmlPart;
-        }
-
-        // subject
-        if ($zfMessage->getSubject() !== null) {
-            $mandrillMessage->subject = $zfMessage->getSubject();
-        }
-
-        // from
-        if ($zfMessage->getFrom()->count()) {
-            $mandrillMessage->from_email = $zfMessage->getFrom()->current()->getEmail();
-            $mandrillMessage->from_name = $zfMessage->getFrom()->current()->getName();
-        }
-
-        // reply-to
-        if ($zfMessage->getReplyTo()->count()) {
-            $mandrillMessage->headers = ['Reply-To' => $zfMessage->getReplyTo()->current()->getEmail()];
-        }
-
-        // to
-        if ($zfMessage->getTo()->count()) {
-            foreach ($zfMessage->getTo() as $to) {
-                $mandrillMessage->addRecipient(new Recipient($to->getEmail(), null, Recipient::RECIPIENT_TYPE_TO));
-            }
-        }
-
-        // cc
-        if ($zfMessage->getCc()->count()) {
-            foreach ($zfMessage->getCc() as $cc) {
-                $mandrillMessage->addRecipient(new Recipient($cc->getEmail(), null, Recipient::RECIPIENT_TYPE_CC));
-            }
-        }
-
-        // bcc
-        if ($zfMessage->getBcc()->count()) {
-            foreach ($zfMessage->getBcc() as $bcc) {
-                $mandrillMessage->addRecipient(new Recipient($bcc->getEmail(), null, Recipient::RECIPIENT_TYPE_BCC));
-            }
-        }
-
-        return $mandrillMessage;
     }
 }

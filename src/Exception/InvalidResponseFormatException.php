@@ -1,15 +1,16 @@
 <?php
 /**
- *
  * InvalidResponseFormatException.php
- * Freax, started: Oct 27, 2015 3:13:06 PM
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Exception;
 
+/**
+ * Class InvalidResponseFormatException
+ * @package Mandrill\Exception
+ */
 class InvalidResponseFormatException extends \RuntimeException implements ExceptionInterface
 {
 }

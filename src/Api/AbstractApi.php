@@ -1,39 +1,33 @@
 <?php
 /**
  * AbstractApi.php
- * Freax, started: Oct 26, 2015 4:45:36 PM.
- *
  * @author based on https://github.com/jlinn/mandrill-api-php
- *
- * @see https://mandrillapp.com/api/docs/
+ * @see    https://mandrillapp.com/api/docs/
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Api;
 
-/*
- * @uses
- */
-use Zend\Json\Json;
-use Zend\Http\Client;
-use Zend\Http\Request;
-use Zend\Http\Exception\RuntimeException as HttpRuntimeException;
-use Zend\Json\Exception\RuntimeException as JsonRuntimeException;
+/* @uses */
 use Mandrill\Exception\EmptyResponseException;
 use Mandrill\Exception\InvalidResponseFormatException;
+use Zend\Http\Client;
+use Zend\Http\Exception\RuntimeException as HttpRuntimeException;
+use Zend\Http\Request;
+use Zend\Json\Exception\RuntimeException as JsonRuntimeException;
+use Zend\Json\Json;
 
 /**
- * Class AbstractApi.
+ * Class AbstractApi
+ * @package Mandrill\Api
  */
 abstract class AbstractApi
 {
-    const BASE_URL = 'https://mandrillapp.com/api/1.0/';
+    const
+        BASE_URL = 'https://mandrillapp.com/api/1.0/';
 
-    /**
-     * @var string Mandrill API key
-     */
+    /** @var string Mandrill API key */
     private $apiKey;
 
     /**

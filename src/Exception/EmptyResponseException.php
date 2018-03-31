@@ -1,15 +1,16 @@
 <?php
 /**
- *
  * EmptyResponseException.php
- * Freax, started: Oct 27, 2015 3:11:04 PM
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Exception;
 
+/**
+ * Class EmptyResponseException
+ * @package Mandrill\Exception
+ */
 class EmptyResponseException extends \RuntimeException implements ExceptionInterface
 {
 }

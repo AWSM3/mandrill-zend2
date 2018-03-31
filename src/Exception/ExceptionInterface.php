@@ -1,15 +1,16 @@
 <?php
 /**
- *
  * ExceptionInterface.php
- * Freax, started: Oct 27, 2015 3:09:48 PM
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Exception;
 
+/**
+ * Interface ExceptionInterface
+ * @package Mandrill\Exception
+ */
 interface ExceptionInterface
 {
 }

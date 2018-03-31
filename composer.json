@@ -1,23 +1,24 @@
 {
-    "name": "freax/mandrill-zend2",
+    "name": "awsm3/mandrill-zend3",
     "type": "library",
-    "description": "A PHP client library for Mandrill's REST API for Zend Framework 2 (>=2.5)",
-    "keywords": [
-        "mandrill",
-        "zf2"
-    ],
+    "description": "A PHP client library for Mandrill's REST API for Zend Framework 3",
+    "keywords": ["mandrill","zf3","zend framework 3", "zend framework"],
     "license": "MIT",
     "authors": [
         {
             "name": "Freax",
             "homepage": "https://github.com/freax"
+        },
+        {
+            "name": "AWSM3",
+            "homepage": "https://github.com/AWSM3"
         }
     ],
     "require": {
-        "php": ">=5.5",
-        "zendframework/zend-json": "~2.5",
-        "zendframework/zend-mail": "~2.5",
-        "zendframework/zend-http": "~2.5"
+        "php": ">=7.0",
+        "zendframework/zend-json": "~3.0",
+        "zendframework/zend-mail": "~2.7",
+        "zendframework/zend-http": "~2.7"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"

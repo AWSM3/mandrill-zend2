@@ -1,20 +1,17 @@
 <?php
 /**
  * AbstractStruct.php
- * Freax, started: Oct 26, 2015 4:52:43 PM.
- *
  * @author based on https://github.com/jlinn/mandrill-api-php
- *
- * @see https://mandrillapp.com/api/docs/
+ * @see    https://mandrillapp.com/api/docs/
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Struct;
 
 /**
- * Class AbstractStruct.
+ * Class AbstractStruct
+ * @package Mandrill\Struct
  */
 abstract class AbstractStruct implements \IteratorAggregate
 {
@@ -22,7 +19,8 @@ abstract class AbstractStruct implements \IteratorAggregate
      * Create a Struct from an associative array.
      *
      * @param array $data   associative array array('property'=>data)
-     * @param bool  $filter (optional) if true, $data array keys which are not defined as properties in the Struct will be ignored
+     * @param bool  $filter (optional) if true, $data array keys which are not defined as properties in the Struct will
+     *                      be ignored
      *
      * @return AbstractStruct
      */
@@ -41,6 +39,19 @@ abstract class AbstractStruct implements \IteratorAggregate
     }
 
     /**
+     * Retrieve an external iterator.
+     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
+     *
+     * @throws \ReflectionException
+     * @return \Traversable an instance of an object implementing Iterator or Traversable
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->toArray());
+    }
+
+    /**
+     * @throws \ReflectionException
      * @return array associative array of property=>value pairs
      */
     public function toArray()
@@ -57,17 +68,5 @@ abstract class AbstractStruct implements \IteratorAggregate
         }
 
         return $properties;
-    }
-
-    /**
-     * Retrieve an external iterator.
-     *
-     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
-     *
-     * @return \Traversable an instance of an object implementing Iterator or Traversable
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->toArray());
     }
 }

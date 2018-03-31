@@ -1,31 +1,29 @@
 <?php
 /**
  * Tags.php
- * Freax, started: Oct 26, 2015 4:49:23 PM.
- *
  * @author based on https://github.com/jlinn/mandrill-api-php
- *
- * @see https://mandrillapp.com/api/docs/
+ * @see    https://mandrillapp.com/api/docs/
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Api;
 
+
 /**
- * Class Tags.
- *
- * @link https://mandrillapp.com/api/docs/tags.JSON.html
+ * Class Tags
+ * @package Mandrill\Api
+ * @link    https://mandrillapp.com/api/docs/tags.JSON.html
  */
 class Tags extends AbstractApi
 {
     /**
      * Return all of the user-defined tag information.
-     *
-     * @return array
-     *
      * @link https://mandrillapp.com/api/docs/tags.JSON.html#method=list
+     *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
+     * @return array
      */
     public function listTags()
     {
@@ -33,33 +31,38 @@ class Tags extends AbstractApi
     }
 
     /**
-     * Deletes a tag permanently. Deleting a tag removes the tag from any messages that have been sent, and also deletes the tag's stats.
+     * Deletes a tag permanently. Deleting a tag removes the tag from any messages that have been sent, and also
+     * deletes the tag's stats.
+     * @link https://mandrillapp.com/api/docs/tags.JSON.html#method=delete
      *
      * @param string $tag a tag name
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
-     *
-     * @link https://mandrillapp.com/api/docs/tags.JSON.html#method=delete
      */
     public function delete($tag)
     {
-        return $this->request('delete', [
+        return $this->request(
+            'delete', [
             'tag' => $tag,
         ]);
     }
 
     /**
      * Return more detailed information about a single tag, including aggregates of recent stats.
+     * @link https://mandrillapp.com/api/docs/tags.JSON.html#method=info
      *
      * @param string $tag a tag name
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
-     *
-     * @link https://mandrillapp.com/api/docs/tags.JSON.html#method=info
      */
     public function info($tag)
     {
-        return $this->request('info', [
+        return $this->request(
+            'info', [
             'tag' => $tag,
         ]);
     }
@@ -69,20 +72,25 @@ class Tags extends AbstractApi
      *
      * @param string $tag https://mandrillapp.com/api/docs/tags.JSON.html#method=time-series
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
      */
     public function timeSeries($tag)
     {
-        return $this->request('time-series', [
+        return $this->request(
+            'time-series', [
             'tag' => $tag,
         ]);
     }
 
     /**
      * Return the recent history (hourly stats for the last 30 days) for all tags.
+     * @link https://mandrillapp.com/api/docs/tags.JSON.html#method=all-time-series
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
-     * @linkhttps://mandrillapp.com/api/docs/tags.JSON.html#method=all-time-series
      */
     public function allTimeSeries()
     {

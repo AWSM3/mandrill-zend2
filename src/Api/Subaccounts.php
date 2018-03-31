@@ -1,145 +1,158 @@
 <?php
 /**
  * Subaccounts.php
- * Freax, started: Oct 26, 2015 4:49:17 PM.
- *
  * @author based on https://github.com/jlinn/mandrill-api-php
- *
- * @see https://mandrillapp.com/api/docs/
+ * @see    https://mandrillapp.com/api/docs/
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill\Api;
 
 /**
- * Class Subaccounts.
- *
- * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html
+ * Class Subaccounts
+ * @package Mandrill\Api
+ * @link    https://mandrillapp.com/api/docs/subaccounts.JSON.html
  */
 class Subaccounts extends AbstractApi
 {
     /**
      * Get the list of subaccounts defined for the account, optionally filtered by a prefix.
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=list
      *
      * @param string $query an optional prefix to filter the subaccounts' ids and names
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
-     *
-     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=list
      */
     public function listSubaccounts($query = null)
     {
-        return $this->request('list', [
+        return $this->request(
+            'list', [
             'q' => $query,
         ]);
     }
 
     /**
      * Add a new subaccount.
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=add
      *
      * @param string $id          a unique identifier for the subaccount to be used in sending calls
      * @param string $name        an optional display name to further identify the subaccount
      * @param string $notes       optional extra text to associate with the subaccount
-     * @param int    $customQuota an optional manual hourly quota for the subaccount. If not specified, Mandrill will manage this based on reputation.
+     * @param int    $customQuota an optional manual hourly quota for the subaccount. If not specified, Mandrill will
+     *                            manage this based on reputation.
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
-     *
-     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=add
      */
     public function add($id, $name = null, $notes = null, $customQuota = null)
     {
-        return $this->request('add', [
-            'id' => $id,
-            'name' => $name,
-            'notes' => $notes,
+        return $this->request(
+            'add', [
+            'id'           => $id,
+            'name'         => $name,
+            'notes'        => $notes,
             'custom_quota' => $customQuota,
         ]);
     }
 
     /**
      * Given the ID of an existing subaccount, return the data about it.
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=info
      *
      * @param string $id the unique identifier of the subaccount to query
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
-     *
-     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=info
      */
     public function info($id)
     {
-        return $this->request('info', [
+        return $this->request(
+            'info', [
             'id' => $id,
         ]);
     }
 
     /**
      * Update an existing subaccount.
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=update
      *
      * @param string $id          he unique identifier of the subaccount to update
      * @param string $name        an optional display name to further identify the subaccount
      * @param string $notes       optional extra text to associate with the subaccount
-     * @param int    $customQuota an optional manual hourly quota for the subaccount. If not specified, Mandrill will manage this based on reputation
+     * @param int    $customQuota an optional manual hourly quota for the subaccount. If not specified, Mandrill will
+     *                            manage this based on reputation
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
-     *
-     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=update
      */
     public function update($id, $name = null, $notes = null, $customQuota = null)
     {
-        return $this->request('update', [
-            'id' => $id,
-            'name' => $name,
-            'notes' => $notes,
+        return $this->request(
+            'update', [
+            'id'           => $id,
+            'name'         => $name,
+            'notes'        => $notes,
             'custom_quota' => $customQuota,
         ]);
     }
 
     /**
-     * Delete an existing subaccount. Any email related to the subaccount will be saved, but stats will be removed and any future sending calls to this subaccount will fail.
+     * Delete an existing subaccount. Any email related to the subaccount will be saved, but stats will be removed and
+     * any future sending calls to this subaccount will fail.
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=delete
      *
      * @param string $id the unique identifier of the subaccount to delete
      *
      * @return array
-     *
-     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=delete
      */
     public function delete($id)
     {
-        return $this->request('delete', [
+        return $this->request(
+            'delete', [
             'id' => $id,
         ]);
     }
 
     /**
-     * Pause a subaccount's sending. Any future emails delivered to this subaccount will be queued for a maximum of 3 days until the subaccount is resumed.
+     * Pause a subaccount's sending. Any future emails delivered to this subaccount will be queued for a maximum of 3
+     * days until the subaccount is resumed.
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=pause
      *
      * @param string $id the unique identifier of the subaccount to pause
      *
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
      * @return array
-     *
-     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=pause
      */
     public function pause($id)
     {
-        return $this->request('pause', [
+        return $this->request(
+            'pause', [
             'id' => $id,
         ]);
     }
 
     /**
      * Resume a paused subaccount's sending.
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=resume
      *
      * @param string $id the unique identifier of the subaccount to resume
      *
-     * @return array
      *
-     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=resume
+     * @throws Mandrill\Exception\EmptyResponseException
+     * @throws Mandrill\Exception\InvalidResponseFormatException
+     * @return array
      */
     public function resume($id)
     {
-        return $this->request('resume', [
+        return $this->request(
+            'resume', [
             'id' => $id,
         ]);
     }

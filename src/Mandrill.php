@@ -1,91 +1,47 @@
 <?php
 /**
  * Mandrill.php
- * Freax, started: Oct 26, 2015 4:53:20 PM.
- *
  * @author based on https://github.com/jlinn/mandrill-api-php
- *
- * @see https://mandrillapp.com/api/docs/
+ * @see    https://mandrillapp.com/api/docs/
  */
+declare(strict_types=1);
 
-/**
- * @namespace
- */
+/** @namespace */
 namespace Mandrill;
 
 /**
- * Class Mandrill.
+ * Class Mandrill
+ * @package Mandrill
  */
 class Mandrill
 {
-    /**
-     * @var Api\Users
-     */
+    /** @var Api\Users */
     protected $users;
-
-    /**
-     * @var Api\Messages
-     */
+    /** @var Api\Messages */
     protected $messages;
-
-    /**
-     * @var Api\Tags
-     */
+    /** @var Api\Tags */
     protected $tags;
-
-    /**
-     * @var Api\Rejects
-     */
+    /** @var Api\Rejects */
     protected $rejects;
-
-    /**
-     * @var Api\Whitelists
-     */
+    /** @var Api\Whitelists */
     protected $whitelists;
-
-    /**
-     * @var Api\Senders
-     */
+    /** @var Api\Senders */
     protected $senders;
-
-    /**
-     * @var Api\Urls
-     */
+    /** @var Api\Urls */
     protected $urls;
-
-    /**
-     * @var Api\Templates
-     */
+    /** @var Api\Templates */
     protected $templates;
-
-    /**
-     * @var Api\Webhooks
-     */
+    /** @var Api\Webhooks */
     protected $webhooks;
-
-    /**
-     * @var Api\Subaccounts
-     */
+    /** @var Api\Subaccounts */
     protected $subaccounts;
-
-    /**
-     * @var Api\Inbound
-     */
+    /** @var Api\Inbound */
     protected $inbound;
-
-    /**
-     * @var Api\Exports
-     */
+    /** @var Api\Exports */
     protected $exports;
-
-    /**
-     * @var Api\Ips
-     */
+    /** @var Api\Ips */
     protected $ips;
-
-    /**
-     * @var string Mandrill API key
-     */
+    /** @var string Mandrill API key */
     private $apiKey;
 
     /**
